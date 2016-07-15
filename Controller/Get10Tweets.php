@@ -14,7 +14,7 @@ $settings = array(
 $count=10;
 $url = "https://api.twitter.com/1.1/statuses/user_timeline.json";
 $requestMethod = "GET";
-$getfield = '?screen_name=CNN&count='.$count;
+$getfield = '?screen_name=salesforce&count='.$count;
 
 $twitter = new TwitterAPIExchange($settings);
 $data = json_decode($twitter->setGetfield($getfield)
@@ -56,28 +56,26 @@ foreach($data as $record){
           }, 15000);
       });
 
-      $(function(){
-        $("#searchBar").click(function(){
-            freshFlag=false;
-            console.log(typeof filter);
-            filter();
-          });
-      });
 
-      function filter(){
-        $(function(){
-          var inputtext = $("#searchInput").val();
-          var data = inputtext.split(" ");
-          //create a jquery object of the rows
+
+      $(function(){
+        $("#searchInput").keyup(function () {
+          //split the current value of searchInput
+          freshFlag=false;
+          var data = this.value.split(" ");
+          if(data==""){
+            $("#autoRefresh").submit();
+          }
+
           var jo = $("#fbody").find("tr");
-          if (inputtext == "") {
+          if (this.value == "") {
               jo.show();
               return;
           }
           //hide all the rows
           jo.hide();
 
-          //Recusively filter the jquery object to get results.
+          // Recusively filter the jquery object to get results.
           jo.filter(function (i, v) {
               var $t = $(this);
               for (var d = 0; d < data.length; ++d) {
@@ -90,50 +88,7 @@ foreach($data as $record){
           //show the rows that match.
           .show();
         });
-      }
-
-      // $(function(){
-      //   $("#searchBar").click(function(){
-      //     if(!freshFlag){
-      //       $("#autoRefresh").submit();
-      //       console.log("start updating");
-      //     }
-      //     });
-      // });
-      //
-      // $(function(){
-      //   $("#searchInput").keyup(function () {
-      //     //split the current value of searchInput
-      //     freshFlag=false;
-      //     var data = this.value.split(" ");
-      //     if(data==""){
-      //       $("#autoRefresh").submit();
-      //     }
-      //     // console.log(data);
-      //     // console.log("stop updating");
-      //     //create a jquery object of the rows
-      //     var jo = $("#fbody").find("tr");
-      //     if (this.value == "") {
-      //         jo.show();
-      //         return;
-      //     }
-      //     //hide all the rows
-      //     jo.hide();
-
-          //Recusively filter the jquery object to get results.
-      //     jo.filter(function (i, v) {
-      //         var $t = $(this);
-      //         for (var d = 0; d < data.length; ++d) {
-      //             if ($t.is(":contains('" + data[d] + "')")) {
-      //                 return true;
-      //             }
-      //         }
-      //         return false;
-      //     })
-      //     //show the rows that match.
-      //     .show();
-      //   });
-      // });
+      });
 
 
 
@@ -141,8 +96,7 @@ foreach($data as $record){
   </head>
 
   <body>
-    <input type="text" id="searchInput">
-    <button id="searchBar"> Search </button>
+    <input type="text" id="searchInput" placeholder="Search the keywords ...">
     <br/>
     <br/>
     <form id="autoRefresh" action="Get10Tweets.php" method="post">
