@@ -3,4 +3,5 @@
   <form action="">
     <input type="text">
     <input type="submit" name="search">
+  </from>
 </html>
