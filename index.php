@@ -52,7 +52,7 @@ foreach($data as $record){
             }else{
               console.log("Stop updating");
             }
-          }, 15000);
+          }, 60000);
       });
 
 
